@@ -14,17 +14,7 @@ seqmat= matrix(seqvec,5,byrow = T, dimnames =list(letters[1:5], letters[1:5]) )
 
 seqcombn= combn(5,2)
 
-# for(i in(seqcombn[1,])){
-#   
-#   for(k in (seqcombn[2,])){
-#     
-#    print(length((setdiff(seqmat[i,],seqmat[k,]))))
-#     
-#   }
-# }
-
 Dissvec=c()
-
 
 distance_matrix <- matrix(0, nrow = 5, ncol = 5)
 rownames(distance_matrix)=letters[1:5]
