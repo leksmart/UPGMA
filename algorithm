@@ -1,0 +1,76 @@
+library(tidyverse)
+library(dendextend )
+
+ a=c("T","G","T","G","T")
+ b=c("T","T","T","G","C")
+ c=c("G","G","T","A","C")
+ d=c("A","A","C","G","T")
+ e=c("C","T","T","G","T")
+ 
+ 
+seqvec= c(a,b,c,d,e)
+  
+seqmat= matrix(seqvec,5,byrow = T, dimnames =list(letters[1:5], letters[1:5]) )
+
+seqcombn= combn(5,2)
+
+# for(i in(seqcombn[1,])){
+#   
+#   for(k in (seqcombn[2,])){
+#     
+#    print(length((setdiff(seqmat[i,],seqmat[k,]))))
+#     
+#   }
+# }
+
+Dissvec=c()
+
+
+distance_matrix <- matrix(0, nrow = 5, ncol = 5)
+rownames(distance_matrix)=letters[1:5]
+colnames(distance_matrix)=letters[1:5]
+
+for(i in 1:ncol(seqcombn)){
+
+  seqi= seqcombn[1,i]
+  
+  seqj= seqcombn[2,i]
+  
+    seqmati=seqmat[seqi,]
+    seqmatj=seqmat[seqj,]
+    
+    D=c()
+    
+    for(s in colnames(seqmat)){
+     D=c(D, seqmati[s] != seqmatj[s])
+    }
+    D=(sum(D))
+    Dissvec=c(Dissvec,D)
+    distance_matrix[ seqi,  seqj]=D
+    distance_matrix[seqj,  seqi]=D
+  }
+
+
+ # Create a symmetric matrix with zeros on the diagonal
+
+ print(distance_matrix)
+
+ 
+ didi=as.dist(distance_matrix, diag = FALSE, upper = FALSE)
+ 
+  ddh=hclust(didi, method="average")
+ 
+ dend= as.dendrogram(ddh)
+ 
+  plot(dend)
+ 
+ dend %>% hang.dendrogram %>% get_nodes_attr("height")
+ 
+ dend %>% get_nodes_attr("midpoint") 
+ 
+ plot(dend)
+ 
+ 
+ tre=  phangorn::upgma(didi, method = "average")
+ 
+ plot(tre)
